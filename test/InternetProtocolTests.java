@@ -1,4 +1,6 @@
+import model.InternetProtocol;
 import model.InternetProtocolAddress;
+import model.InternetProtocolMetadata;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,6 +19,15 @@ public class InternetProtocolTests {
     Assert.assertFalse(InternetProtocolAddress.validate("1.2.256.4"));
     Assert.assertFalse(InternetProtocolAddress.validate("9.9.9.9.9"));
     Assert.assertFalse(InternetProtocolAddress.validate("73.73.73. "));
+  }
+
+  @Test
+  public void testMetadataFetch() {
+    InternetProtocol ip = new InternetProtocolAddress("1.1.1.1");
+    InternetProtocolMetadata metadata = ip.getMetadata();
+    
+    Assert.assertEquals(metadata.getCity(), "Brisbane");
+    Assert.assertEquals(metadata.getCountry(), "AU");
   }
 
 }

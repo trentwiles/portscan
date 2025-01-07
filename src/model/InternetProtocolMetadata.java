@@ -3,18 +3,16 @@ package model;
 public class InternetProtocolMetadata {
   private String country;
   private String city;
-  private int asn;
+  private String asn;
 
-  public InternetProtocolMetadata(String country, String city, int asn) {
-    if (country == null || city == null) {
+  public InternetProtocolMetadata(String country, String city, String asn) {
+    if (country == null || city == null || asn == null) {
       throw new IllegalArgumentException("Country/City cannot be null");
     }
-    if (asn <= 0) {
-      throw new IllegalArgumentException("ASN cannot be less than or equal to 0");
-    }
-    this.country = country;
-    this.city = city;
-    this.asn = asn;
+
+    this.country = country.strip();
+    this.city = city.strip();
+    this.asn = asn.strip();
   }
 
   public String getCountry() {
@@ -25,12 +23,12 @@ public class InternetProtocolMetadata {
     return city;
   }
 
-  public int getAsn() {
+  public String getAsn() {
     return asn;
   }
 
   @Override
   public String toString() {
-    return "This IP address is located in " + this.city + ", " + this.country + " and is owned by AS" + this.asn;
+    return "This IP address is located in " + this.city + ", " + this.country + " and is owned by " + this.asn;
   }
 }

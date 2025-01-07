@@ -92,9 +92,9 @@ public class InternetProtocolAddress implements InternetProtocol {
     String starter = API_BASE_URL + this.toString();
     String country = httpReq(starter + "/country");
     String city = httpReq(starter + "/city");
-    String asn = httpReq(starter + "/asn");
+    String asn = httpReq(starter + "/org");
 
-    return new InternetProtocolMetadata(country, city, Integer.parseInt(asn));
+    return new InternetProtocolMetadata(country, city, asn);
   }
 
   private String httpReq(String url) {
