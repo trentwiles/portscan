@@ -25,7 +25,7 @@ public class InternetProtocolTests {
   public void testMetadataFetch() {
     InternetProtocol ip = new InternetProtocolAddress("1.1.1.1");
     InternetProtocolMetadata metadata = ip.getMetadata();
-    
+
     Assert.assertEquals(metadata.getCity(), "Brisbane");
     Assert.assertEquals(metadata.getCountry(), "AU");
   }

@@ -89,6 +89,10 @@ public class InternetProtocolAddress implements InternetProtocol {
 
   @Override
   public InternetProtocolMetadata getMetadata() {
+    if (this.isPrivate()) {
+      throw new IllegalStateException("Cannot fetch metadata for a private IP");
+    }
+
     String starter = API_BASE_URL + this.toString();
     String country = httpReq(starter + "/country");
     String city = httpReq(starter + "/city");
@@ -111,7 +115,9 @@ public class InternetProtocolAddress implements InternetProtocol {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
       // Output the response
-      System.out.println("Status Code: " + response.statusCode());
+      if (response.statusCode() != 200) {
+        throw new IllegalStateException("Non 200 status code from upstream API, " + response.statusCode());
+      }
       return response.body();
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();
