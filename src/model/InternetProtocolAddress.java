@@ -1,10 +1,17 @@
 package model;
 
+import java.net.http.*;
+import java.net.URI;
+import java.io.IOException;
+
+
 public class InternetProtocolAddress implements InternetProtocol {
-  private int digitOne;
-  private int digitTwo;
-  private int digitThree;
-  private int digitFour;
+  private final int digitOne;
+  private final int digitTwo;
+  private final int digitThree;
+  private final int digitFour;
+
+  private final String API_BASE_URL = "https://ipinfo.io/";
 
   public InternetProtocolAddress(String ip) {
     // throws exception if there's an issue
@@ -79,4 +86,43 @@ public class InternetProtocolAddress implements InternetProtocol {
 
     return privateCaseOne || privateCaseTwo || privateCaseThree || privateCaseFour || privateCaseFive;
   }
+
+  @Override
+  public InternetProtocolMetadata getMetadata() {
+    String starter = API_BASE_URL + this.toString();
+    String country = httpReq(starter + "/country");
+    String city = httpReq(starter + "/city");
+    String asn = httpReq(starter + "/asn");
+
+    return new InternetProtocolMetadata(country, city, Integer.parseInt(asn));
+  }
+
+  private String httpReq(String url) {
+    HttpClient client = HttpClient.newHttpClient();
+
+    // Define the request
+    HttpRequest request = HttpRequest.newBuilder()
+      .uri(URI.create(url))
+      .GET() // Use .POST() or other methods as needed
+      .build();
+
+    try {
+      // Send the request and receive the response
+      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+      // Output the response
+      System.out.println("Status Code: " + response.statusCode());
+      return response.body();
+    } catch (IOException | InterruptedException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  @Override
+  public String toString() {
+    return this.digitOne + "." + this.digitTwo + "." + this.digitThree + "." + this.digitFour;
+  }
+
+  // at some point override equals
 }
