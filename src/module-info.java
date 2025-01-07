@@ -4,4 +4,5 @@ module JavaFX.tutorial {
   requires javafx.controls;
 
   opens view;
+  opens model;
 }
